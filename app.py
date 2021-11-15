@@ -6,6 +6,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
+from dash.exceptions import PreventUpdate
 import plotly.express as px
 import pandas as pd
 import numpy as np
@@ -37,14 +38,16 @@ APP_PATH = str(pathlib.Path(__file__).parent.resolve())
 df = pd.read_csv('data/application_train.csv', nrows=None)
 test_df = pd.read_csv('data/application_test.csv', nrows=None)
 print("Train samples: {}, test samples: {}".format(len(df), len(test_df)))
-#df = df.append(test_df).reset_index()
+
 data_application_train = df
 data_application_train['nombre de prêts demandés'] = 1
 data_application_train['prêt accepté'] = np.where(
     data_application_train['TARGET'] == 0, 'Oui', 'Non')
 
+test_df=application_train_test(test_df)
 list_for_dropdown = [{'label': id, 'value': id}
-                     for id in data_application_train['SK_ID_CURR']]
+                     for id in test_df['SK_ID_CURR']]
+
 
 
 app.layout = html.Div([
@@ -53,10 +56,12 @@ app.layout = html.Div([
         children=[
             build_tabs(
                 children_1=html.Div([
+                  html.Div([
                     html.Div([generate_section_banner('Taux acceptation'),
                               draw_pie(data_application_train), ],
                              id="ooc-piechart-outer",
-                             className="col-6",),
+                             style={ 'width': '46vw'},
+                             className='cards-graph'),
                     html.Div([
                         generate_section_banner(
                             html.Label(["Variable à visualiser :",
@@ -65,30 +70,46 @@ app.layout = html.Div([
                                             value='CODE_GENDER', options=[
                                                 {'label': c, 'value': c}
                                                 for c in get_columns(data_application_train)],  style={'width': '200px'})
-                                        ], style={'display': 'flex', 'justifyContent': 'space-around'})),
+                                        ],
+                                        style={'display': 'flex', 'justifyContent': 'space-around', 'width': '90%', 'align-items':'center'})),
                         html.Div(id='graph', style={'height': '50vh'})
-                    ], style={'width': '500px', 'marginLeft': '5px', 'verticalAlign': 'middle'}, className="col-6"),  # style={'display':'flex', 'justifyContent': 'space-around', 'height':'100%'}) ,
-                ], className='row'),
+                    ], style={  'width': '46vw'}, 
+                    className='cards-graph'),  # style={'display':'flex', 'justifyContent': 'space-around', 'height':'100%'}) ,
+                ], className='row', style={'display': 'flex', 'justifyContent': 'center'})],
+                className='container-fluid'),
                 children_2=html.Div([
                     html.Div([
-                        html.Div([html.Div([html.H3('Formulaire demande de prêt')], style={'width': '400px', 'display': 'flex'}),  # 'display': 'flex', 'margin': 'auto',
-                                  dcc.Dropdown(id='SELECT_CLIENT_TEST',
-                                               options=list_for_dropdown, placeholder='Selectionner un client', style={'width': '200px'})
-                                  ], style={'display': 'flex'}, className="four column"),
-                        build_form()], className="col-sm",),  # id='build_form'
-                    html.Div([html.H3('Résulats scoring'),
-                              html.Button('Mettre à jour le scoring',
+                        generate_section_banner(html.Div([
+                          html.H6('Formulaire demande de prêt'), #, style={'width': '400px', 'display': 'flex'}
+                          dcc.Dropdown(id='SELECT_CLIENT_TEST',
+                              options=list_for_dropdown, placeholder='Selectionner un client', style={'width': '200px'})
+                        ], style={'display': 'flex', 'justifyContent': 'space-between', 'width': '95%',
+                        'align-items':'center'})
+                                 ), # ], style={'display': 'flex'}, className="four column")
+                        build_form()], className="col-sm cards-graph",),  # id='build_form'
+                    html.Div([
+                      generate_section_banner(html.Div([
+                        html.H6('Résulats scoring'),
+                        html.Button('Mettre à jour le scoring',
                                           id='submit-scoring'),
-                              html.Div([
-                                  html.Div(id='scoring_result'),
-                                  dcc.Graph(id='scoring_explanation'),
-                              ], id='container-scoring')], className="col-sm")
+                      ],
+                       style={'display': 'flex', 'justifyContent': 'space-around', 'width': '90%',
+                       'align-items':'center'})),
+                     html.Div([
+                                  html.Div(id='scoring_result', style={'font-size': '2rem'}),
+                                  #dcc.Graph(id='scoring_explanation'),
+                                  dcc.Loading(id = "loading-icon",
+                           #'graph', 'cube', 'circle', 'dot', or 'default'
+                 type = 'cube',
+                children=[html.Div(dcc.Graph(id='scoring_explanation'),
+                  style={'display': 'None'}, id='scoring_explanation_container')])
+                              ], id='container-scoring')], className="col-sm cards-graph")
                 ], className='row')
             ),
         ],
         id="app-container"
     ),
-], id="big-app-container")
+], id="big-app-container ")
 
 
 # Define callback to update graph
@@ -99,25 +120,37 @@ app.layout = html.Div([
 def update_figure(variable):
     df_pivot = pd.pivot_table(data_application_train, values='nombre de prêts demandés', columns=[
                               variable, 'prêt accepté'], aggfunc='count').T.reset_index()
-    nb_loan = len(data_application_train)
-    df_pivot['percentage'] = df_pivot['nombre de prêts demandés']/nb_loan
-    df_pivot.style.format({'percentage': '{:,.2%}'})
-    print(df_pivot)
+    df_pivot_0=df_pivot[df_pivot['prêt accepté']=='Oui']
+    df_pivot_1=df_pivot[df_pivot['prêt accepté']=='Non']
+
     return dcc.Graph(
-        id="piechart2",
+        id="bar_variable",
         figure={
             "data": [
                 {
-                    "x": df[variable],
-                    "y": df_pivot['nombre de prêts demandés'],
+                    "x": df_pivot_0[variable],
+                    "y": df_pivot_0['nombre de prêts demandés'],
                     "type": "bar",
                     # "marker": {"line": {"color": "white", "width": 1}},
                     "hoverinfo": "label",
                     "textinfo": "label",
+                    "name":"prêt remboursé",
+                },
+                {
+                    "x": df_pivot_1[variable],
+                    "y": df_pivot_1['nombre de prêts demandés'],
+                    "color": df_pivot_1['prêt accepté'],
+                    "type": "bar",
+                    # "marker": {"line": {"color": "white", "width": 1}},
+                    "hoverinfo": "label",
+                    "textinfo": "label",
+                    "name": 'Prêt avec difficulté de paiement'
                 }
+
             ],
             "layout": {
-                "margin": dict(l=20, r=20, t=20, b=20),
+                #"padding": dict(l=30, r=20, t=20, b=100),
+                "margin": dict(l=40, r=20, t=20, b=100),
                 "showlegend": True,
                 "paper_bgcolor": "rgba(0,0,0,0)",
                 "plot_bgcolor": "rgba(0,0,0,0)",
@@ -125,11 +158,9 @@ def update_figure(variable):
                 "autosize": True,
             },
         },
+         style={'height': '100%', 'max-width': '100%'}
     )
 
-    # return px.bar(df_pivot, y='nombre de prêts demandés', x=variable, color='prêt accepté',
-    #             color_discrete_map={'Oui': 'green', 'Non': 'red'}, text=df_pivot['percentage'],
-    #           title='Taux acceptation en fonction de ' + variable)
 
 
 def hot_deencoding(data_dict, variable_name):
@@ -175,7 +206,7 @@ def get_test_data(client_test):
     }
 
     if client_test != None:
-        data_client = data_test[data_test['SK_ID_CURR'] == client_test].to_dict('records')[
+        data_client = test_df[test_df['SK_ID_CURR'] == client_test].to_dict('records')[
             0]
         family_status = hot_deencoding(data_client, 'NAME_FAMILY_STATUS_')
         name_income = hot_deencoding(data_client, 'NAME_INCOME_TYPE_')
@@ -184,7 +215,6 @@ def get_test_data(client_test):
         occupation_type = hot_deencoding(data_client, 'OCCUPATION_TYPE_')
         organization_type = hot_deencoding(data_client, 'ORGANIZATION_TYPE_')
 
-        print('AAAAAAAAAAAAAAA',  data_client)
         values = {
             'name_contract_type': data_client['NAME_CONTRACT_TYPE'],
             'code_gender': data_client['CODE_GENDER'],
@@ -224,6 +254,7 @@ def get_test_data(client_test):
 @app.callback(
     Output('scoring_result', 'children'),
     Output('scoring_explanation', 'figure'),
+    Output('scoring_explanation_container', 'style'),
     [Input("submit-scoring", "n_clicks")],
     [
         State("NAME_CONTRACT_TYPE", "value"),
@@ -315,6 +346,8 @@ def ask_scoring(n_clicks, name_contract_type, code_gender, cnt_children, age, fl
         payload["NEW_SEGMENT_AGE_Old"] = 1
 
     print(payload)
+    if n_clicks is None:
+        raise PreventUpdate
     # "http://localhost:5000/predict/"
     scoring_requests = requests.post(
         "https://scoring-oc-server.herokuapp.com/predict", data=payload)
@@ -322,7 +355,7 @@ def ask_scoring(n_clicks, name_contract_type, code_gender, cnt_children, age, fl
     json_data = scoring_requests.json()
     #response = pd.DataFrame(json_data)
     print(json_data, json_data['lime'])
-    return scoring_result(json_data['target']), draw_scoring_explanation(json_data['lime'])
+    return scoring_result(json_data['target']), draw_scoring_explanation(json_data['lime']),{'display': 'block'}
 
 
 # Running the server

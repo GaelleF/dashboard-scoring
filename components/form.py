@@ -29,49 +29,49 @@ def build_form(values=default_values):
             options=[
                 {'label': 'prêt', 'value': 0},  # 'Cash loans'
                 {'label': 'prêt renouvelable', 'value': 1},  # 'Revolving loans'
-            ], value=default_values['name_contract_type'], style={'width': '200px'})], className='row'),
+            ], value=default_values['name_contract_type'], style={'width': '200px'})], className='row form-element'),
         html.Label([html.Div(['Sexe : '], style={'width': '250px'}), dcc.Dropdown(
             id='CODE_GENDER',
             options=[
                 {'label': 'Homme', 'value': 1},  # M
                 {'label': 'Femme', 'value': 0},  # F
-            ], value=default_values['code_gender'], style={'width': '200px'})], className='row'),
+            ], value=default_values['code_gender'], style={'width': '200px'})], className='row form-element'),
 
         html.Label([html.Div(["Nombre d'enfants : "], style={'width': '250px'}), dcc.Input(
-            id='CNT_CHILDREN', type='number', min=0, max=15, step=1, value=default_values['cnt_children'])], className='row'),
+            id='CNT_CHILDREN', type='number', min=0, max=15, step=1, value=default_values['cnt_children'])], className='row form-element'),
 
         html.Label([html.Div(["Age : "], style={'width': '250px'}), dcc.Input(
-            id='AGE', type='number', min=18, max=100, step=1, value=default_values['age'])], className='row'),
+            id='AGE', type='number', min=18, max=100, step=1, value=default_values['age'])], className='row form-element'),
         html.Label([html.Div(['Possède une voiture : '], style={'width': '250px'}), dcc.Dropdown(
             id='FLAG_OWN_CAR',
             options=[
                 {'label': 'oui', 'value': 1},  # 'Y'
                 {'label': 'non', 'value': 0},  # 'N'
-            ], value=default_values['flag_own_car'], style={'width': '200px'})], className='row'),
+            ], value=default_values['flag_own_car'], style={'width': '200px'})], className='row form-element'),
         html.Label([html.Div(['Possède un logement : '], style={'width': '250px'}), dcc.Dropdown(
             id='FLAG_OWN_REALTY',
             options=[
                 {'label': 'oui', 'value': 1},  # 'Y'
                 {'label': 'non', 'value': 0},  # 'N'
-            ], value=default_values['flag_own_realty'], style={'width': '200px'})], className='row'),
+            ], value=default_values['flag_own_realty'], style={'width': '200px'})], className='row form-element'),
 
         html.Label([html.Div(['Montant du crédit : '], style={'width': '250px'}),
                     dcc.Input(id="AMT_CREDIT", type="number", min=0, step=1,
                               placeholder="montant crédit", value=default_values['amt_credit'])
-                    ], className='row'),
+                    ], className='row form-element'),
 
         html.Label([html.Div(['Montant des revenus : '], style={'width': '250px'}),
                     dcc.Input(id="AMT_INCOME", type="number", min=0, step=1,
                               placeholder="montant revenus", value=default_values['amt_income'])
-                    ], className='row'),
+                    ], className='row form-element'),
 
-        html.Label([html.Div(['zone de risque de la région (avec villes) : '], style={'width': '250px'}), dcc.Dropdown(
+        html.Label([html.Div(['Zone de risque de la région (villes) :'], style={'width': '250px'}), dcc.Dropdown(
             id='REGION_RATING_CLIENT_W_CITY',
             options=[
                 {'label': 'zone 1', 'value': 1},
                 {'label': 'zone 2', 'value': 2},
                 {'label': 'zone 3', 'value': 3},
-            ], value=default_values['region_rating'], style={'width': '200px'})], className='row'),
+            ], value=default_values['region_rating'], style={'width': '200px'})], className='row form-element'),
         html.Label([html.Div(['Status familial : '], style={'width': '250px'}), dcc.Dropdown(
             id='FAMILY_STATUS',
             options=[
@@ -80,7 +80,7 @@ def build_form(values=default_values):
                 {'label': 'séparé', 'value': 'Separated'},
                 {'label': 'Célibataire', 'value': 'Single_not_married'},
                 {'label': 'veuf', 'value': 'Widow'},
-            ], value=default_values['family_status'], style={'width': '200px'})], className='row'),
+            ], value=default_values['family_status'], style={'width': '200px'})], className='row form-element'),
         html.Label([html.Div(['Type de revenu : '], style={'width': '250px'}), dcc.Dropdown(
             id='NAME_INCOME_TYPE',
             options=[
@@ -88,7 +88,7 @@ def build_form(values=default_values):
                 {'label': 'commercial', 'value': 'Commercial associate'},
                 {'label': 'public', 'value': 'State servant'},
                 {'label': 'salarié', 'value': 'Working'},
-            ], value=default_values['name_income_type'], style={'width': '200px'})], className='row'),
+            ], value=default_values['name_income_type'], style={'width': '200px'})], className='row form-element'),
         html.Label([html.Div(['Logement actuel : '], style={'width': '250px'}), dcc.Dropdown(
             id='NAME_HOUSING_TYPE',
             options=[
@@ -99,7 +99,7 @@ def build_form(values=default_values):
                 {'label': 'locataire', 'value': 'Rented apartment'},
                 {'label': 'chez les parents', 'value': 'With parents'},
 
-            ], value=default_values['name_housing_type'], style={'width': '200px'})], className='row'),
+            ], value=default_values['name_housing_type'], style={'width': '200px'})], className='row form-element'),
         html.Label([html.Div(["niveau d'éducation : "], style={'width': '250px'}), dcc.Dropdown(
             id='NAME_EDUCATION_TYPE',  # TO CHECK !!!
             options=[
@@ -107,7 +107,7 @@ def build_form(values=default_values):
                 {'label': 'universitaire', 'value': 'Incomplete higher'},
                 {'label': 'bac', 'value': 'Secondary_secondary_special'},
                 {'label': 'lycée', 'value': 'Lower secondary'},
-            ], value=default_values['name_education_type'], style={'width': '200px'})], className='row'),
+            ], value=default_values['name_education_type'], style={'width': '200px'})], className='row form-element'),
         html.Label([html.Div(['Type emploi : '], style={'width': '250px'}), dcc.Dropdown(
             id='OCCUPATION_TYPE',
             options=[
@@ -122,7 +122,7 @@ def build_form(values=default_values):
                 {'label': 'medecine', 'value': 'Medicine staff'},
                 {'label': 'autres', 'value': 'Others'},
                 {'label': 'vendeur', 'value': 'Sales staff'},
-            ], value=default_values['occupation_type'], style={'width': '200px'})], className='row'),
+            ], value=default_values['occupation_type'], style={'width': '200px'})], className='row form-element'),
         html.Label([html.Div(['Secteur emploi : '], style={'width': '250px'}), dcc.Dropdown(
             id='ORGANIZATION_TYPE',
             options=[
@@ -141,5 +141,5 @@ def build_form(values=default_values):
                 {'label': 'tourisme-restauration', 'value': 'TourismFoodSector'},
                 {'label': 'commerce', 'value': 'Trade'},
                 {'label': 'Transport', 'value': 'Transport'},
-            ], value=default_values['organization_type'], style={'width': '200px'})], className='row'),
-    ],  id='form_container', style={'marginRight': '10px', 'marginLeft': '10px'})
+            ], value=default_values['organization_type'], style={'width': '200px'})], className='row form-element'),
+    ],  id='form_container', style={'margin': '10px'})

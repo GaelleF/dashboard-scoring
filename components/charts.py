@@ -6,7 +6,56 @@ import dash_core_components as dcc
 
 def draw_scoring_explanation(lime):
     lime_df = pd.DataFrame(lime, columns=['variable', 'value'])
-    return px.bar(lime_df, x="value", y="variable", orientation='h')
+    print( 'LIME bar h', lime_df['variable'])
+    return {
+            "data": [
+                {
+                    "x": lime_df['value'],
+                    "y": lime_df['variable'],
+                    "type": "bar",
+                    "orientation": 'h',
+                    #"marker": {"line": {"color": "white", "width": 1}},
+                    "hoverinfo": "label",
+                    "textinfo": "label",
+          
+                }
+            ],
+            "layout": {
+                "margin": dict(l=250, r=20, t=20, b=20),
+                "showlegend": False,
+                "paper_bgcolor": "rgba(0,0,0,0)",
+                "plot_bgcolor": "rgba(0,0,0,0)",
+                "font": {"color": "white"},
+                "autosize": True,
+                #"height": '50vh'
+            },
+        }
+    return dcc.Graph(
+        id="bar-lime-chart",
+        figure={
+            "data": [
+                {
+                    "x": lime_df['value'],
+                    "y": lime_df['variable'],
+                    "type": "bar",
+                    "marker": {"line": {"color": "white", "width": 1}},
+                    "hoverinfo": "label",
+                    "textinfo": "label",
+                }
+            ],
+            "layout": {
+                "margin": dict(l=20, r=20, t=20, b=20),
+                "showlegend": True,
+                "paper_bgcolor": "rgba(0,0,0,0)",
+                "plot_bgcolor": "rgba(0,0,0,0)",
+                "font": {"color": "white"},
+                "autosize": True,
+                #"height": '50vh'
+            },
+        })
+    
+    
+    #return px.bar(lime_df, x="value", y="variable", orientation='h')
 
 
 def draw_pie_old(data_application_train):
@@ -39,6 +88,7 @@ def draw_pie(data_application_train):
                 "plot_bgcolor": "rgba(0,0,0,0)",
                 "font": {"color": "white"},
                 "autosize": True,
+                #"height": '50vh'
             },
         },
     )
