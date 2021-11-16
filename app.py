@@ -27,6 +27,7 @@ app = dash.Dash(
                 "content": "width=device-width, initial-scale=1"}],
     external_stylesheets=[dbc.themes.SLATE]
 )
+server = app.server
 
 # https://github.com/plotly/dash-sample-apps/blob/main/apps/dash-manufacture-spc-dashboard/app.py
 
@@ -360,5 +361,5 @@ def ask_scoring(n_clicks, name_contract_type, code_gender, cnt_children, age, fl
 
 # Running the server
 if __name__ == "__main__":
-    # app.run_server(debug=True, port=8500)
-    app.run(debug=True)
+    app.run_server(debug=True)
+    #app.run(debug=True)
