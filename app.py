@@ -360,4 +360,5 @@ def ask_scoring(n_clicks, name_contract_type, code_gender, cnt_children, age, fl
 
 # Running the server
 if __name__ == "__main__":
-    app.run_server(debug=True, port=8500)
+    # app.run_server(debug=True, port=8500)
+    app.run(debug=True)
