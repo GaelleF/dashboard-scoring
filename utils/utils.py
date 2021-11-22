@@ -4,7 +4,7 @@ import pandas as pd
 
 
 def scoring_result(target):
-    if target == 0:
+    if target[0] == 0:
         scoring = 'Prêt accepté'
     else:
         scoring = 'Prêt refusé'

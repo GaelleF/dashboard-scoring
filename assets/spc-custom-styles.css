@@ -178,6 +178,11 @@ body {
   margin: 5px;
 }
 
+.form-element input {
+  max-width: 150px;
+  margin-left: 10px;
+}
+
 .section-banner {
   color: darkgray;
   font-size: 1.5rem;

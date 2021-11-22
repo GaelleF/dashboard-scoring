@@ -288,14 +288,9 @@ def ask_scoring(n_clicks, name_contract_type, code_gender, cnt_children, age, fl
                "NAME_INCOME_TYPE_Commercial associate": 0.0, "NAME_INCOME_TYPE_Pensioner": 0.0,
                "NAME_INCOME_TYPE_State servant": 0.0, "NAME_INCOME_TYPE_Working": 0.0,
 
-               "NAME_EDUCATION_TYPE_Agriculture": 0.0, "NAME_EDUCATION_TYPE_Business_Entity": 0.0,
-               "NAME_EDUCATION_TYPE_Construction": 0.0, "NAME_EDUCATION_TYPE_Education": 0.0,
-               "NAME_EDUCATION_TYPE_Finance": 0.0, "NAME_EDUCATION_TYPE_Government": 0.0,
-               "NAME_EDUCATION_TYPE_Industry": 0.0, "NAME_EDUCATION_TYPE_Official": 0.0,
-               "NAME_EDUCATION_TYPE_Other": 0.0, "NAME_EDUCATION_TYPE_Realty": 0.0,
-               "NAME_EDUCATION_TYPE_Secondary_secondary_special": 0.0, "NAME_EDUCATION_TYPE_Security": 0.0,
-               "NAME_EDUCATION_TYPE_Self-employed": 0.0, "NAME_EDUCATION_TYPE_TourismFoodSector": 0.0,
-               "NAME_EDUCATION_TYPE_Trade": 0.0, "NAME_EDUCATION_TYPE_Transport": 0.0, "NAME_EDUCATION_TYPE_XNA": 0.0,
+
+               "NAME_EDUCATION_TYPE_Secondary_secondary_special": 0.0, "NAME_EDUCATION_TYPE_Higher education":0,
+               "NAME_EDUCATION_TYPE_Incomplete higher":0, "NAME_EDUCATION_TYPE_Lower secondary":0,
 
                "NAME_FAMILY_STATUS_Civil marriage": 0.0, "NAME_FAMILY_STATUS_Married": 0.0,
                "NAME_FAMILY_STATUS_Separated": 0.0, "NAME_FAMILY_STATUS_Single_not_married": 0.0,
@@ -325,12 +320,19 @@ def ask_scoring(n_clicks, name_contract_type, code_gender, cnt_children, age, fl
                "NEW_SEGMENT_INCOME_High_Income": 0.0, "NEW_SEGMENT_INCOME_Low_Income": 0.0,
                "NEW_SEGMENT_INCOME_Middle_Income": 0.0}
 
-    payload["NAME_INCOME_TYPE_"+name_income_type] = 1
-    # payload["NAME_EDUCATION_TYPE_"+name_education_type]=1
-    payload["NAME_FAMILY_STATUS_"+family_status] = 1
-    payload["NAME_HOUSING_TYPE_"+housing_type] = 1
-    payload["OCCUPATION_TYPE_"+occupation_type] = 1
-    payload["ORGANIZATION_TYPE_"+organization_type] = 1
+
+    if (name_income_type != None):
+      payload["NAME_INCOME_TYPE_"+name_income_type] = 1
+    if (name_education_type != None):
+      payload["NAME_EDUCATION_TYPE_"+name_education_type]=1
+    if (family_status != None):
+      payload["NAME_FAMILY_STATUS_"+family_status] = 1
+    if (housing_type != None):
+      payload["NAME_HOUSING_TYPE_"+housing_type] = 1
+    if (occupation_type != None):
+      payload["OCCUPATION_TYPE_"+occupation_type] = 1
+    if (organization_type != None):
+      payload["ORGANIZATION_TYPE_"+organization_type] = 1
 
     if amt_income <= 112500:
         payload["NEW_SEGMENT_INCOME_Low_Income"] = 1
