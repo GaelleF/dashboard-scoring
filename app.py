@@ -229,7 +229,7 @@ def get_test_data(client_test):
             'family_status': family_status,
             'name_income_type': name_income,
             'name_housing_type': name_housing,
-            'name_education_type': 'Lower secondary',
+            'name_education_type': name_education,
             'occupation_type': occupation_type,
             'organization_type': organization_type
         }
@@ -281,6 +281,8 @@ def ask_scoring(n_clicks, name_contract_type, code_gender, cnt_children, age, fl
           amt_credit, amt_income, region_rating, family_status, name_income_type, name_education_type,
           occupation_type, organization_type)
     ratio = amt_income/amt_credit
+    amt_credit= np.log(amt_credit)
+    amt_income= np.log(amt_income)
     payload = {"NAME_CONTRACT_TYPE": name_contract_type, "CODE_GENDER": code_gender, "FLAG_OWN_CAR": flag_own_car,
                "FLAG_OWN_REALTY": flag_own_realty, "CNT_CHILDREN": cnt_children, "AMT_INCOME_TOTAL": amt_income,
                "AMT_CREDIT": amt_credit, "REGION_RATING_CLIENT_W_CITY": region_rating,
@@ -289,8 +291,8 @@ def ask_scoring(n_clicks, name_contract_type, code_gender, cnt_children, age, fl
                "NAME_INCOME_TYPE_State servant": 0.0, "NAME_INCOME_TYPE_Working": 0.0,
 
 
-               "NAME_EDUCATION_TYPE_Secondary_secondary_special": 0.0, "NAME_EDUCATION_TYPE_Higher education":0,
-               "NAME_EDUCATION_TYPE_Incomplete higher":0, "NAME_EDUCATION_TYPE_Lower secondary":0,
+                "NAME_EDUCATION_TYPE_Higher education":0,"NAME_EDUCATION_TYPE_Incomplete higher":0,
+                "NAME_EDUCATION_TYPE_Lower secondary":0,"NAME_EDUCATION_TYPE_Secondary_secondary_special": 0.0,
 
                "NAME_FAMILY_STATUS_Civil marriage": 0.0, "NAME_FAMILY_STATUS_Married": 0.0,
                "NAME_FAMILY_STATUS_Separated": 0.0, "NAME_FAMILY_STATUS_Single_not_married": 0.0,
